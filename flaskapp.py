@@ -2,6 +2,7 @@ import json
 from easyAI import TwoPlayerGame, Human_Player, AI_Player, Negamax
 from flask import Flask, request, make_response
 
+SINU_NIMI = 'Semjon Kravtšenko'
 
 class TicTacToe(TwoPlayerGame):
     """The board positions are numbered as follows:
@@ -98,10 +99,12 @@ def play_game():
             ttt.play_move(ai_move)
     if "reset" in content:
         ttt.board = [0 for i in range(9)]
-    if ttt.is_over():
-        msg = ttt.winner()
+        msg = 'Sind tervitab ' + SINU_NIMI
     else:
-        msg = "play move"
+        if ttt.is_over():
+            msg = ttt.winner()
+        else:
+            msg = "play move"
 
     resp = make_response(json.dumps({'msg': msg, 'board': ttt.as_string()}))
     c = ",".join(map(str, ttt.board))
@@ -110,4 +113,4 @@ def play_game():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host="0.0.0.0")
